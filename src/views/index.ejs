@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title><%= title %> </title>
+    <meta name="generator" content="Bootply" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+<div style="min-height: 100vh;">
+    <header class="navbar navbar-bright navbar-fixed-top" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <nav class="collapse navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">Gyani AI</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <div class="chat-container">
+            <div id="chat-history"></div>
+            <div class="input-group mb-3 myfooter ">
+                <hr>
+                <span>
+                  <div class="input-group mb-3 myfooter ">
+                    <textarea cols="30" rows="2" id="user-input" class="form-control" style="width:80%; margin-left: 10px; margin-bottom: 5px; position: relative;"></textarea>
+                    <!-- Microphone icon inside the textarea -->
+                    <span class="voice-icon1">
+                        <!-- You can replace this with your desired icon -->
+                      
+                    </span>
+                    <!-- Buttons for Play and Pause -->
+                  <button id="playButton">Play</button>
+                  <button id="pauseButton">Pause</button>
+                  <button id="resumeButton">Resume</button>
+
+
+                    <i class="fa fa-microphone icon-size" onclick="startVoiceInput()" ></i>
+
+
+                    <div class="input-group-append">
+                      
+                       <button class="btn btn-primary" type="button" onclick="sendMessage()" style="margin-left: 2px;">Send</button>
+                  </div>
+                </div>
+
+                </span>
+                
+              
+               
+            </div>
+        </div>
+    </div>
+    <hr>
+</div>
+<footer>
+</footer>
+<script>
+    // Function to start voice input
+    function startVoiceInput() {
+        // Initialize SpeechRecognition object
+        const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+        recognition.lang = 'en-US'; // Set language
+        recognition.start(); // Start recognition
+
+        recognition.onresult = function(event) {
+            // Get the recognized text and update the textarea
+            const transcript = event.results[0][0].transcript;
+            document.getElementById("user-input").value = transcript;
+        }
+
+        recognition.onend = function() {
+            recognition.stop();
+        }
+    }
+    
+</script>
+
+
+<script>
+  function sendMessage() {
+    var userInput = document.getElementById("user-input").value;
+    if (userInput.trim() === "") return;
+    appendMessage('user', userInput);
+    getChatGPTResponse(userInput);
+    document.getElementById("user-input").value = "";
+  }
+
+  function getChatGPTResponse(userInput) {
+    // You would need to implement logic to send the user input to ChatGPT and receive a response
+    // For demonstration purposes, let's just simulate a response here
+
+    var response = "This is a simulated response from ChatGPT.";
+    const data = {
+            input:userInput
+          };
+          //https://gyani-baba.onrender.com/chat-api/
+
+          fetch('https://gyani-baba.onrender.com/chat-api/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log(data.response);
+            response=data.response;
+            appendMessage('chatgpt', response);
+          })
+          .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+          });
+
+  }
+
+
+
+
+function appendMessage(sender, message) {
+ 
+  var chatHistory = document.getElementById("chat-history");
+  var messageDiv = document.createElement("div");
+  messageDiv.className = "code-snippet";
+
+  var headerDiv = document.createElement("div");
+  headerDiv.className = "snippet-header";
+  headerDiv.className = sender === 'user' ? 'user-message' : 'chat-box';
+  headerDiv.textContent = sender.toUpperCase(); // Display sender (e.g., HTML, CSS, JavaScript) in uppercase
+  messageDiv.appendChild(headerDiv);
+
+  if (sender === 'chatgpt') {
+    var codeBlocks = message.split("```"); // Split the message into parts delimited by ```
+    for (var i = 0; i < codeBlocks.length; i++) {
+      // If i is odd, it means this part is a code block
+      if (i % 2 === 1) {
+        var codeDiv = document.createElement("pre");
+        codeDiv.className = "code-block"; // Add a specific class for styling
+        codeDiv.textContent = codeBlocks[i].trim(); // Trim leading/trailing whitespace
+        messageDiv.appendChild(codeDiv);
+
+        // Create a copy button for each code block
+        var copyButton = document.createElement("button");
+        copyButton.textContent = "Copy";
+        copyButton.className = "btn btn-secondary btn-sm mycopy";
+        (function(block) { // Creating a closure to capture the current value of `i`
+          copyButton.onclick = function() {
+            // Create a temporary textarea to hold the text
+            var tempTextArea = document.createElement("textarea");
+            tempTextArea.value = block.trim();
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempTextArea);
+          };
+        })(codeBlocks[i]); // Passing the current code block to the closure
+        messageDiv.appendChild(copyButton);
+      } else {
+        var textDiv = document.createElement("div");
+        textDiv.textContent = codeBlocks[i].trim();
+        messageDiv.appendChild(textDiv);
+      }
+    }
+
+    speakMessage(message); // Speak the message
+    
+  } else {
+    // For user messages or other types of responses, just display the message without special formatting
+    var textDiv = document.createElement("div");
+    textDiv.textContent = message.trim();
+    messageDiv.appendChild(textDiv);
+  }
+
+  chatHistory.appendChild(messageDiv);
+  chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+
+
+
+
+var lastMessage="";
+var msg = new SpeechSynthesisUtterance();
+        var speaking = false;
+
+        // Function to speak a message
+        function speakMessage(message) {          
+          lastMessage = message;
+            msg.text = lastMessage;
+            window.speechSynthesis.speak(msg);
+            speaking = true;
+        }
+
+        // Function to pause speech synthesis
+        function pauseSpeech() {
+            window.speechSynthesis.pause();
+            speaking = false;
+        }
+
+        // Function to resume speech synthesis
+        function resumeSpeech() {
+            window.speechSynthesis.resume();
+            speaking = true;
+        }
+
+        // Event listener for the play button
+        document.getElementById("playButton").addEventListener("click", function() {
+            var userInput = document.getElementById("user-input").value;
+            speakMessage(userInput);
+        });
+
+        // Event listener for the pause button
+        document.getElementById("pauseButton").addEventListener("click", function() {
+            pauseSpeech();
+        });
+
+        // Event listener for the resume button
+        document.getElementById("resumeButton").addEventListener("click", function() {
+            if (!speaking) {
+                speakMessage(msg.text);
+            } else {
+                resumeSpeech();
+            }
+        });
+
+
+
+
+</script>
+
+
+<!-- script references -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
