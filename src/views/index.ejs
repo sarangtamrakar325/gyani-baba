@@ -28,8 +28,8 @@
             </div>
             <nav class="collapse navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav">
-                    <li> 
-                       <a href="#">Gyani Baba AI</a>
+                    <li>
+                        <a href="#">Gyani AI</a>
                     </li>
                 </ul>
             </nav>
@@ -113,7 +113,7 @@
     const data = {
             input:userInput
           };
-          //https://gyani-baba.onrender.com/chat-api/
+         // https://gyani-baba-dpbo.onrender.com/chat-api/
 
           fetch('https://gyani-baba-dpbo.onrender.com/chat-api/', {
             method: 'POST',
@@ -131,7 +131,7 @@
           .then(data => {
             console.log(data.response);
             response=data.response;
-            appendMessage('GYANI-BABA AI', response);
+            appendMessage('chatgpt', response);
           })
           .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
