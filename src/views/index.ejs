@@ -18,7 +18,8 @@
 <div style="min-height: 100vh;">
     <header class="navbar navbar-bright navbar-fixed-top" role="banner">
         <div class="container">
-            <div class="navbar-header">
+           
+          <div class="navbar-header">
                 <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -28,13 +29,17 @@
             </div>
             <nav class="collapse navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">Gyani AI</a>
-                    </li>
-                </ul>
+                  
+                     <strong> <a href="#">GYANI-BABA AI </a></strong> 
+                       
+                        <a href="#">
+                          <img src="images/gyani-logo.jpg" alt="logo" style="width:20%; height:20%;">
+                        </a> 
+                </ul>         
             </nav>
         </div>
     </header>
+   
     <div class="container">
         <div class="chat-container">
             <div id="chat-history"></div>
@@ -42,31 +47,33 @@
                 <hr>
                 <span>
                   <div class="input-group mb-3 myfooter ">
-                    <textarea cols="30" rows="2" id="user-input" class="form-control" style="width:80%; margin-left: 10px; margin-bottom: 5px; position: relative;"></textarea>
+                    <textarea cols="20" rows="2" id="user-input" class="form-control" style="width:70%; margin-left: 10px; margin-bottom:20px; 
+                    position: relative;"></textarea>
+                    
                     <!-- Microphone icon inside the textarea -->
                     <span class="voice-icon1">
                         <!-- You can replace this with your desired icon -->
                       
                     </span>
+
                     <!-- Buttons for Play and Pause -->
-                  <button id="playButton">Play</button>
-                  <button id="pauseButton">Pause</button>
-                  <button id="resumeButton">Resume</button>
+                 <span>  
+                      <button id="playButton">Play</button>
+                      <button id="pauseButton">Pause</button>
+                      <button id="resumeButton">Resume</button>
+                 </span> 
 
-
-                    <i class="fa fa-microphone icon-size" onclick="startVoiceInput()" ></i>
-
+                  
+                    <i class="fa fa-microphone icon-size" onclick="startVoiceInput()" > </i>
 
                     <div class="input-group-append">
                       
-                       <button class="btn btn-primary" type="button" onclick="sendMessage()" style="margin-left: 2px;">Send</button>
+                       <button class="btn btn-primary" type="button" onclick="sendMessage()" style="margin-left: 20px;">Send</button>
                   </div>
                 </div>
 
                 </span>
-                
-              
-               
+ 
             </div>
         </div>
     </div>
@@ -74,7 +81,9 @@
 </div>
 <footer>
 </footer>
+
 <script>
+
     // Function to start voice input
     function startVoiceInput() {
         // Initialize SpeechRecognition object
@@ -95,8 +104,15 @@
     
 </script>
 
-
 <script>
+   // Add event listener for the textarea to detect Enter key press
+   document.getElementById('user-input').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();  // Prevents newline in the textarea
+            sendMessage();
+        }
+    });
+
   function sendMessage() {
     var userInput = document.getElementById("user-input").value;
     if (userInput.trim() === "") return;
@@ -131,16 +147,13 @@
           .then(data => {
             console.log(data.response);
             response=data.response;
-            appendMessage('chatgpt', response);
+            appendMessage('GYANIBABA', response);
           })
           .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
           });
 
   }
-
-
-
 
 function appendMessage(sender, message) {
  
