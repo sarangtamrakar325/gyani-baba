@@ -32,9 +32,9 @@
                   
                         <a href="https://gyani-baba-dpbo.onrender.com/">
                           <img src="images/gyani-logo.jpg" alt="logo" style="width:25%; height:25%;">
-                        </a> 
-                        
-                </ul>   
+                        </a>     
+                </ul>
+                   
                 <h1> Gyani-Baba AI </h1>   
             </nav>
         </div>
@@ -147,7 +147,7 @@
           .then(data => {
             console.log(data.response);
             response=data.response;
-            appendMessage('chatgpt', response);
+            appendMessage('gyani-baba', response);
           })
           .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
@@ -167,7 +167,7 @@ function appendMessage(sender, message) {
   headerDiv.textContent = sender.toUpperCase(); // Display sender (e.g., HTML, CSS, JavaScript) in uppercase
   messageDiv.appendChild(headerDiv);
 
-  if (sender === 'chatgpt') {
+  if (sender === 'gyani-baba') {
     var codeBlocks = message.split("```"); // Split the message into parts delimited by ```
     for (var i = 0; i < codeBlocks.length; i++) {
       // If i is odd, it means this part is a code block
